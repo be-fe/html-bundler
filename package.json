@@ -1,0 +1,52 @@
+{
+  "name": "html-bundler",
+  "version": "0.0.5",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "hb": "./bin/html-bundler.js"
+  },
+  "author": "xieyu33333",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "commander": "x",
+    "fs-extra": "^1.0.0",
+    "gulp": "^3.9.1",
+    "gulp-bird": "0.0.3",
+    "gulp-concat": "^2.6.1",
+    "gulp-if": "^2.0.2",
+    "gulp-inline": "^0.1.2",
+    "gulp-inline-source": "^3.0.0",
+    "gulp-less": "^3.3.0",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-sourcemaps": "^1.9.1",
+    "gulp-uglify": "^2.0.0",
+    "is_js": "^0.9.0",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-stream": "^3.2.0",
+    "happypack": "x",
+    "babel-loader": "x",
+    "babel-core": "x",
+    "babel-preset-es2015": "x",
+    "babel": "x",
+    "gulp-clean-css": "x",
+    "gulp-changed": "x",
+    "is_js": "x",
+    "colors": "x",
+    "del": "x",
+    "gulp-base64": "x",
+    "gulp-connect": "x",
+    "through2": "x",
+    "url-loader": "x",
+    "html-loader": "x",
+    "json-loader": "x",
+    "file-loader": "x"
+
+  },
+  "devDependencies": {}
+}
