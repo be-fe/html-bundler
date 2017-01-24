@@ -34,6 +34,10 @@ var handleJS = function(jsArr, conf, filename, env) {
             return originConf;
         }
     }
+    else {
+        var generateWebpackConf = function() {};
+    }
+
 
     if (!conf.buildTarget.js && !conf.bundle && !conf.concat){
         var target = function(file){

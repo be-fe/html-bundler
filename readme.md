@@ -1,5 +1,14 @@
 # html-bundler
 
+### Why html-bundler
+目前最流行的打包工具是webpack和gulp，都有着良好的生态和海量的用户，但是在我们使用的过程中发现了以下一些问题：
+
+- webpack的上手难度较高,官方文档比较差
+- 所有资源都用webpack打包的情况下性能较差
+- gulp虽然上手简单，但是插件众多，如何进行选择和最佳实践是一个大问题
+- 每做一个项目都需要修改构建程序.
+
+
 ### Globle Mod
 ```sh
 npm install html-bundler -g

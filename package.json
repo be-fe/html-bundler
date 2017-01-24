@@ -1,6 +1,6 @@
 {
   "name": "html-bundler",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,6 @@
     "gulp-bird": "0.0.3",
     "gulp-concat": "^2.6.1",
     "gulp-if": "^2.0.2",
-    "gulp-inline": "^0.1.2",
     "gulp-inline-source": "^3.0.0",
     "gulp-less": "^3.3.0",
     "gulp-minify-html": "^1.0.6",
@@ -27,12 +26,8 @@
     "gulp-uglify": "^2.0.0",
     "is_js": "^0.9.0",
     "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2",
     "webpack-stream": "^3.2.0",
     "happypack": "3.0.2",
-    "babel-loader": "6.2.10",
-    "babel-core": "6.21.0",
-    "babel-preset-es2015": "6.18.0",
     "gulp-clean-css": "2.3.2",
     "gulp-changed": "1.3.2",
     "is_js": "0.9.0",
@@ -43,13 +38,8 @@
     "gulp-postcss": "6.3.0",
     "autoprefixer": "6.7.0",
     "through2": "2.0.3",
-    "url-loader": "0.5.7",
-    "html-loader": "0.4.4",
-    "json-loader": "0.5.4",
-    "file-loader": "0.9.0",
     "gulp-debug": "3.0.0",
     "gulp-plumber": "1.1.0"
-
   },
   "devDependencies": {}
 }
