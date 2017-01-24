@@ -51,10 +51,14 @@ module.exports = function(env, port) {
         }
     }
 
+    if (!fs.existsSync(path.join(currentPath, './html-bundler.config'))) {
+        logger.error('当前目录下缺少html-bundler.config.js 配置文件，请使用`hb init`或自己手动创建。');
+    }
+
     try {
         var config = require(path.join(currentPath, './html-bundler.config'));
     } catch(e) {
-        logger.error('配置文件不存在');
+        logger.error('html-bundler.config.js 配置文件出现错误');
         return
     }
 
