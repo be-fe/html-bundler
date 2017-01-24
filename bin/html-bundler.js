@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var commander = require('commander');
 var htmlBundler = require('../src/index.js');
+var logger = require('../src/utils/logger.js');
 var process = require('process');
 var fs = require('fs-extra');
 var path = require('path');
@@ -25,9 +26,11 @@ commander.command('init')
     .action(function(webpack) {
         if (!fs.existsSync(REAL_CONFIG)) {
             fs.copySync(DEFAULT_CONFIG, REAL_CONFIG);
+            logger.info('html-bundler配置文件创建成功, 请根据项目情况进行配置');
         }
         if (!fs.existsSync(REAL_WEBPACK_CONFIG) && webpack.webpack) {
             fs.copySync(DEFAULT_WEBPACK_CONFIG, REAL_WEBPACK_CONFIG);
+            logger.info('webpack配置文件创建成功, 请根据项目情况进行修改并安装依赖');
         }
 
     })
@@ -40,8 +43,10 @@ commander.command('create [project]')
     .action(function(project, webpack) {
         fs.copySync(DEFAULT_STRUCTURE, path.join(currentPath, project));
         fs.copySync(DEFAULT_CONFIG, path.join(currentPath, project, './html-bundler.config.js'));
+        logger.notice('项目' + project + '创建成功');
         if (webpack.webpack) {
             fs.copySync(DEFAULT_WEBPACK_CONFIG, path.join(currentPath, project, './webpack.config.js'));
+            logger.info('webpack配置文件创建成功, 请根据项目情况进行修改并安装依赖');
         }
     })
 

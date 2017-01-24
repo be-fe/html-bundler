@@ -13,7 +13,6 @@ Array.prototype.unique = function () {
 module.exports = function(env, port) {
     var gulp = require('gulp');
     var gulpif = require('gulp-if');
-    var inline = require('gulp-inline');
     var inlinesource = require('gulp-inline-source');
     var htmlmin = require('gulp-minify-html');
     var base64 = require('gulp-base64');

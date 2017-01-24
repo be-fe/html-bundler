@@ -22,7 +22,7 @@ module.exports = {
             any: ['./src/html']
         },
         server: true,
-        buildTarget: 'same'
+        buildTarget: 'default'
     },
 
     destMod: {
@@ -62,7 +62,6 @@ module.exports = {
 
 /*
  * buildTarget用于设置dist后的目录结构，如果选择default,则默认为css, js, html
- * 如果选择same, 则和原目录结构保持一致
  * 如果是一个对象，则表示自定义，不过目前只支持按照文件类型进行分类。
  */
 
