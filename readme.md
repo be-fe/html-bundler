@@ -7,6 +7,7 @@ npm install html-bundler -g
 
 ```sh
 hb create project
+hb create project -w //add webpack.config.js local
 ```
 
 
