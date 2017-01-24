@@ -1,3 +1,15 @@
+Array.prototype.unique = function () {
+    var res = [];
+    var json = {};
+    for (var i = 0; i < this.length; i++) {
+        if (!json[this[i]]) {
+            res.push(this[i]);
+            json[this[i]] = 1;
+        }
+    }
+    return res;
+}
+
 module.exports = function(env, port) {
     var gulp = require('gulp');
     var gulpif = require('gulp-if');
@@ -172,11 +184,15 @@ module.exports = function(env, port) {
             var jsArr = [];
             var cssArr = [];
             var imgArr = [];
+            var ignoreArr = [];
             var content = file.contents.toString();
             var $ = cheerio.load(content);
             var filename = file.path.replace(file.base, '').replace('.html', '');
             var cwd = file.cwd;
 
+            /*
+             *  将所有相对路径改为绝对路径，以适应不同目录结构
+             */
             var getPath = function(item, arr, attr) {
                 var originPath = item.attr(attr);
                 if (is.string(originPath) && !is.url(originPath)) {
@@ -185,10 +201,7 @@ module.exports = function(env, port) {
                         arr.push(result);
                     }
                     else {
-                        gulp.src(result)
-                            .pipe(gulp.dest(function(file){
-                                return path.dirname(path.join(conf.output, path.relative(conf.src, file.path)));
-                            }));
+                        ignoreArr.push(result);
                     }
                 }
             }
@@ -204,6 +217,15 @@ module.exports = function(env, port) {
             $('img').each(function(i, item) {
                 getPath($(item), imgArr, 'src');
             });
+
+            /*
+             *  先去重以提升编译效率
+             */
+            imgArr.unique();
+            cssArr.unique();
+            jsArr.unique();
+            ignoreArr.unique();
+
 
             var replaceResource = function() {
                 var htmlOutput = path.join(conf.output, conf.buildTarget.html);
@@ -263,6 +285,16 @@ module.exports = function(env, port) {
                 handleJS(jsArr, conf, filename, env);
                 handleCSS(cssArr, conf, filename, env);
                 handleImage(imgArr, conf, filename, env);
+            }
+
+            /*
+             * 被忽略的文件以不变的目录结构放到
+             */
+            if (ignoreArr.length) {
+                gulp.src(ignoreArr)
+                    .pipe(gulp.dest(function(file){
+                        return path.dirname(path.join(conf.output, path.relative(conf.src, file.path)));
+                    }));
             }
 
             file.contents = new Buffer($.html());

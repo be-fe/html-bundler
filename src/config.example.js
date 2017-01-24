@@ -15,11 +15,6 @@ module.exports = {
         sourcemap: true,
         less: true,
         inline: false,
-        customTask: {
-            js: [],
-            css: [],
-            imgs: []
-        },
         watchFolder: {
             css: ['./src/css'],
             js: ['./src/js'],
@@ -40,11 +35,6 @@ module.exports = {
         sourcemap: false,
         watchFolder: null,
         server: false,
-        customTask: {
-            js: [],
-            css: [],
-            imgs: []
-        },
         buildTarget: {
             js: './js/',
             css: './css/',
