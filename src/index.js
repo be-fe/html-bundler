@@ -184,6 +184,12 @@ module.exports = function(env, port) {
                     if (!isIgnore(result, config.ignore)) {
                         arr.push(result);
                     }
+                    else {
+                        gulp.src(result)
+                            .pipe(gulp.dest(function(file){
+                                return path.dirname(path.join(conf.output, path.relative(conf.src, file.path)));
+                            }));
+                    }
                 }
             }
 
