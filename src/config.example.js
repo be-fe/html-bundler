@@ -22,14 +22,14 @@ module.exports = {
             any: ['./src/html']
         },
         server: true,
-        buildTarget: 'default'
+        buildTarget: 'same'
     },
 
     destMod: {
         output: './dist',
         minify: true,
         bundle: true,
-        concat: false,
+        concat: true,
         less: true,
         inline: false,
         sourcemap: false,
@@ -44,7 +44,7 @@ module.exports = {
     },
 
     birdConfig: {
-        basePath: "./",
+        basePath: "./dev",
         targetServer: {
             port: "8276",
             host: "your server host",

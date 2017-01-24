@@ -26,7 +26,7 @@ commander.command('init')
         if (!fs.existsSync(REAL_CONFIG)) {
             fs.copySync(DEFAULT_CONFIG, REAL_CONFIG);
         }
-        if (!fs.existsSync(REAL_WEBPACK_CONFIG) && webpack) {
+        if (!fs.existsSync(REAL_WEBPACK_CONFIG) && webpack.webpack) {
             fs.copySync(DEFAULT_WEBPACK_CONFIG, REAL_WEBPACK_CONFIG);
         }
 
@@ -36,10 +36,13 @@ commander.command('init')
  */
 commander.command('create [project]')
     .description('create a empty project')
-    .action(function(project) {
+    .option('-w --webpack')
+    .action(function(project, webpack) {
         fs.copySync(DEFAULT_STRUCTURE, path.join(currentPath, project));
         fs.copySync(DEFAULT_CONFIG, path.join(currentPath, project, './html-bundler.config.js'));
-        fs.copySync(DEFAULT_WEBPACK_CONFIG, path.join(currentPath, project, './webpack.config.js'));
+        if (webpack.webpack) {
+            fs.copySync(DEFAULT_WEBPACK_CONFIG, path.join(currentPath, project, './webpack.config.js'));
+        }
     })
 
 /*
