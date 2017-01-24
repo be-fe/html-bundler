@@ -19,7 +19,9 @@ module.exports = function(env, port) {
     var path = require('path');
     var process = require('process');
     var is = require('is_js');
+
     var logger = require('./utils/logger.js');
+    var isIgnore = require('./utils/isIgnore.js');
 
     var currentPath = process.cwd();
 
@@ -102,7 +104,7 @@ module.exports = function(env, port) {
 
     conf.src = path.join(currentPath, config.src);
     conf.output = path.join(currentPath, conf.output);
-    conf.imgSrc = path.join(currentPath, conf.imgFolder);
+    conf.imgSrc = path.join(currentPath, config.imgFolder, './**');
 
     getAbsolutePath(config.entries);
 
@@ -114,6 +116,43 @@ module.exports = function(env, port) {
         getAbsolutePath(conf.watchFolder.js, '**');
         getAbsolutePath(conf.watchFolder.imgs, '**');
         getAbsolutePath(conf.watchFolder.any, '**');
+    }
+
+    /*
+     * 给所有资源添加inline属性，供gulp-inline-source使用
+     */
+    var addInlineAttr = function() {
+        return through.obj(function (file, enc, cb) {
+            if (file.isNull()) {
+                this.push(file);
+                return cb();
+            }
+
+            if (file.isStream()) {
+                return cb();
+            }
+
+            var content = file.contents.toString();
+            var $ = cheerio.load(content, {xmlMode: false});
+
+            $('script').each(function(i, item) {
+                var src = $(item).attr('src');
+                if (!is.url(src)) {
+                    $(item).attr('inline', 'inline');
+                }
+            });
+            $('link').each(function(i, item) {
+                var href = $(item).attr('href');
+                if (!is.url(href)) {
+                    $(item).attr('inline', 'inline');
+                }
+            });
+            $('img').attr('inline', 'inline');
+
+            file.contents = new Buffer($.html());
+            this.push(file);
+            cb();
+        });
     }
 
     /*
@@ -142,7 +181,9 @@ module.exports = function(env, port) {
                 var originPath = item.attr(attr);
                 if (is.string(originPath) && !is.url(originPath)) {
                     var result = path.join(file.base, originPath);
-                    arr.push(result);
+                    if (!isIgnore(result, config.ignore)) {
+                        arr.push(result);
+                    }
                 }
             }
 
@@ -169,7 +210,7 @@ module.exports = function(env, port) {
 
                 $('script').each(function(i, item) {
                     var src = $(item).attr('src');
-                    if (!is.url(src)) {
+                    if (!is.url(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
                         $(item).remove();
                     }
                 });
@@ -177,7 +218,7 @@ module.exports = function(env, port) {
 
                 $('link').each(function(i, item) {
                     var href = $(item).attr('href');
-                    if (!is.url(href)) {
+                    if (!is.url(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
                         $(item).remove();
                     }
                 });
@@ -228,20 +269,50 @@ module.exports = function(env, port) {
 
     var run = function(env) {
         logger.info('build begin!!');
-        if (!conf.buildTarget.css && !conf.bundle && !conf.concat){
-            var target = function(file){
-                return path.dirname(path.join(conf.output, path.relative(conf.src, file.path)));
+        var getTarget = function(type) {
+            if (!conf.buildTarget[type]){
+                var target = function(file){
+                    return path.dirname(path.join(conf.output, path.relative(conf.src, file.path)));
+                }
             }
+            else {
+                var target = path.join(conf.output, conf.buildTarget[type]);
+            }
+            return target;
         }
-        else {
-            var target = path.join(conf.output, conf.buildTarget.html);
-        }
-        gulp.src(config.entries)
-            .pipe(gulpif(!conf.inline, findResource(env)))
-            .pipe(gulpif(conf.inline, inlinesource({
-                attribute: ''
-            })))
-            .pipe(gulp.dest(target))
+
+        var htmlTarget = getTarget('html');
+        var imageTarget = getTarget('imgs');
+
+        var promise = new Promise((resolve, reject) => {
+            if (env !== 'js' && env !== 'css') {
+                logger.notice('执行图片复制');
+                gulp.src(conf.imgSrc)
+                    .on('error', reject)
+                    .pipe(gulp.dest(imageTarget))
+                    .on('end', resolve)
+            }
+            else {
+                resolve();
+            }
+        });
+
+        promise.then(function() {
+            gulp.src(config.entries)
+                .pipe(gulpif(!conf.inline, findResource(env)))
+                .pipe(gulpif(conf.inline, addInlineAttr()))
+                .pipe(gulpif(conf.inline, inlinesource()))
+                .pipe(gulpif(conf.minify, htmlmin()))
+                .on('error', function() {
+                    logger.notice('构建失败::>_<::');
+                })
+                .pipe(gulp.dest(htmlTarget))
+                .on('end', function() {
+                    logger.notice('构建完成=^_^=');
+                })
+        })
+
+
     }
 
 

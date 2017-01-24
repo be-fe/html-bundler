@@ -3,6 +3,10 @@ module.exports = {
 
     entries: ['./src/html/**', './src/*.html'],
 
+    ignore: ['./src/js/lib', './src/css/lib'],
+
+    imgFolder: './src/imgs',
+
     devMod: {
         output: './dev',
         minify: false,
@@ -11,7 +15,11 @@ module.exports = {
         sourcemap: true,
         less: true,
         inline: false,
-        imgFolder: './src/imgs',
+        customTask: {
+            js: [],
+            css: [],
+            imgs: []
+        },
         watchFolder: {
             css: ['./src/css'],
             js: ['./src/js'],
@@ -29,11 +37,14 @@ module.exports = {
         concat: false,
         less: true,
         inline: false,
-        imgFolder: './src/imgs',
         sourcemap: false,
         watchFolder: null,
         server: false,
-
+        customTask: {
+            js: [],
+            css: [],
+            imgs: []
+        },
         buildTarget: {
             js: './js/',
             css: './css/',

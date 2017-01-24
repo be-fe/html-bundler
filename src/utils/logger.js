@@ -24,4 +24,9 @@ module.exports = {
         console.log(msg);
     },
 
+    notice: function(msg, type) {
+        var type = type || 'info';
+        this[type]('***********' + msg + '***********');
+    }
+
 }
