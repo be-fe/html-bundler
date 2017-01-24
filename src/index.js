@@ -51,6 +51,9 @@ module.exports = function(env, port) {
         }
     }
 
+    /*
+     * 文件缺失容错处理
+     */
     if (!fs.existsSync(path.join(currentPath, './html-bundler.config.js'))) {
         logger.error('当前目录下缺少html-bundler.config.js 配置文件，请使用`hb init`或自己手动创建。');
         return
@@ -61,6 +64,10 @@ module.exports = function(env, port) {
     } catch(e) {
         logger.error('html-bundler.config.js 配置文件出现错误');
         return
+    }
+
+    if (!fs.existsSync(path.join(currentPath, './webpack.config.js'))) {
+        logger.info('当前目录下没有webpack.config.js文件 ，将使用默认配置，如果需要自定义，请使用`hb init -w`命令进行创建。');
     }
 
     /*
@@ -232,7 +239,7 @@ module.exports = function(env, port) {
             ignoreArr.unique();
 
 
-            var replaceResource = function() {
+            var replaceResource = function(type) {
                 var htmlOutput = path.join(conf.output, conf.buildTarget.html);
                 var jsOutput = path.join(conf.output, conf.buildTarget.js);
                 var cssOutput = path.join(conf.output, conf.buildTarget.css);
@@ -240,38 +247,49 @@ module.exports = function(env, port) {
                 var timeStamp = new Date().getTime();
                 var jsPath = path.join(path.relative(htmlOutput, jsOutput), filename +'.js') + '?v=' + timeStamp;
                 var cssPath = path.join(path.relative(htmlOutput, cssOutput), filename +'.css') + '?v=' + timeStamp;;
+                if (type !== 'css') {
+                    $('script').each(function(i, item) {
+                        var src = $(item).attr('src');
+                        if (!is.url(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
+                            $(item).remove();
+                        }
+                    });
+                    $('body').append('<script src="' + jsPath + '"></script>');
+                }
 
-                $('script').each(function(i, item) {
-                    var src = $(item).attr('src');
-                    if (!is.url(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
-                        $(item).remove();
-                    }
-                });
-                $('body').append('<script src="' + jsPath + '"></script>');
-
-                $('link').each(function(i, item) {
-                    var href = $(item).attr('href');
-                    if (!is.url(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
-                        $(item).remove();
-                    }
-                });
-                $('head').append('<link href="' + cssPath + '"/>');
+                if (type !== 'js') {
+                    $('link').each(function(i, item) {
+                        var href = $(item).attr('href');
+                        if (!is.url(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
+                            $(item).remove();
+                        }
+                    });
+                    $('head').append('<link href="' + cssPath + '"/>');
+                }
             }
 
-            var addVersion = function() {
-                $('script').each(function(i, item) {
-                    var origin = $(this).attr('src').replace(/.\w+$/g, '.js');
-                    $(this).attr('src', origin + '?v=' + new Date().getTime());
-                })
+            var addVersion = function(type) {
+                if (type !== 'css') {
+                    $('script').each(function(i, item) {
+                        var origin = $(this).attr('src').replace(/.\w+$/g, '.js');
+                        $(this).attr('src', origin + '?v=' + new Date().getTime());
+                    })
+                }
 
-                $('link').each(function(i, item) {
-                    var origin = $(this).attr('href').replace(/.\w+$/g, '.css');
-                    $(this).attr('href', origin + '?v=' + new Date().getTime());
-                })
+                if (type !== 'js') {
+                    $('link').each(function(i, item) {
+                        var origin = $(this).attr('href').replace(/.\w+$/g, '.css');
+                        $(this).attr('href', origin + '?v=' + new Date().getTime());
+                    })
+                }
             }
 
-            if (conf.concat || conf.bundle) {          //如果bundle成一个文件
+            if (conf.concat) {          //如果bundle成一个文件
                 replaceResource();
+            }
+            else if (conf.bundle) {
+                replaceResource('js');
+                addVersion('css');
             }
             else {
                 addVersion();
