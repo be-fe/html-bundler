@@ -29,6 +29,7 @@ module.exports = function(env, port) {
     var through = require('through2');
     var cheerio = require('cheerio');
     var path = require('path');
+    var fs = require('fs');
     var process = require('process');
     var is = require('is_js');
 
@@ -51,8 +52,9 @@ module.exports = function(env, port) {
         }
     }
 
-    if (!fs.existsSync(path.join(currentPath, './html-bundler.config'))) {
+    if (!fs.existsSync(path.join(currentPath, './html-bundler.config.js'))) {
         logger.error('当前目录下缺少html-bundler.config.js 配置文件，请使用`hb init`或自己手动创建。');
+        return
     }
 
     try {

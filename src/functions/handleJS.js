@@ -9,30 +9,32 @@ var path = require('path');
 var is = require('is_js');
 var currentPath = process.cwd();
 var debug = require('gulp-debug');
-
-
-try {
-    var webpackConfig = require(path.join(currentPath, './webpack.config'));
-}
-catch(e) {
-    console.log(e);
-    var webpackConfig = require('../webpack.config.default.js');
-}
-
-var generateWebpackConf = function(webpackConfig, filename, env) {
-    var originConf = webpackConfig[env];
-    if (!is.object(originConf)) {
-        return
-    }
-    else {
-        originConf.output = {filename: filename + ".js"}
-    }
-
-    return originConf;
-}
-
+var fs = require('fs');
+var logger = require('../utils/logger');
 
 var handleJS = function(jsArr, conf, filename, env) {
+    if (conf.bundle) {
+        if (!fs.existsSync(path.join(currentPath, './webpack.config.js'))) {
+            logger.info('当前目录下没有webpack.config.js文件 ，将使用默认配置，如果需要自定义，请使用`hb init -w`命令进行创建。');
+            var webpackConfig = require('../webpack.config.default.js');
+        }
+        else {
+            var webpackConfig = require(path.join(currentPath, './webpack.config'));
+        }
+
+        var generateWebpackConf = function(webpackConfig, filename, env) {
+            var originConf = webpackConfig[env];
+            if (!is.object(originConf)) {
+                return
+            }
+            else {
+                originConf.output = {filename: filename + ".js"}
+            }
+
+            return originConf;
+        }
+    }
+
     if (!conf.buildTarget.js && !conf.bundle && !conf.concat){
         var target = function(file){
             return path.dirname(path.join(conf.output, path.relative(conf.src, file.path)));
