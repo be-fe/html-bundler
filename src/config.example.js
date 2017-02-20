@@ -56,7 +56,7 @@ module.exports = {
     },
 
     serverConfig: {
-
+        root: './dev'
     }
 }
 
