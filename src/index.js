@@ -157,7 +157,7 @@ module.exports = function(env, port) {
             }
 
             var content = file.contents.toString();
-            var $ = cheerio.load(content, {xmlMode: false});
+            var $ = cheerio.load(content, {xmlMode: false, decodeEntities: false});
 
             $('script').each(function(i, item) {
                 var src = $(item).attr('src');
@@ -271,15 +271,22 @@ module.exports = function(env, port) {
             var addVersion = function(type) {
                 if (type !== 'css') {
                     $('script').each(function(i, item) {
-                        var origin = $(this).attr('src').replace(/.\w+$/g, '.js');
-                        $(this).attr('src', origin + '?v=' + new Date().getTime());
+                        var src = $(this).attr('src')
+                        if (src) {
+                            var origin = src.replace(/.\w+$/g, '.js');
+                            $(this).attr('src', origin + '?v=' + new Date().getTime());
+                        }
+
                     })
                 }
 
                 if (type !== 'js') {
                     $('link').each(function(i, item) {
-                        var origin = $(this).attr('href').replace(/.\w+$/g, '.css');
-                        $(this).attr('href', origin + '?v=' + new Date().getTime());
+                        var href = $(this).attr('href');
+                        if (href) {
+                            var origin = href.replace(/.\w+$/g, '.css');
+                            $(this).attr('href', origin + '?v=' + new Date().getTime());
+                        }
                     })
                 }
             }
