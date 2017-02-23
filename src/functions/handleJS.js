@@ -47,7 +47,7 @@ var handleJS = function(jsArr, conf, filename, env) {
         var target = path.join(conf.output, conf.buildTarget.js);
     }
     gulp.src(jsArr)
-        .pipe(gulpif(env !== 'dest', changed(target, {extension: '.js'})))
+        // .pipe(gulpif(env !== 'dest', changed(target, {extension: '.js'})))
         .pipe(gulpif(true, debug({title: 'JS file build:'})))
         .pipe(gulpif(conf.sourcemap, sourcemap.init()))
         .pipe(gulpif(conf.bundle, webpack(generateWebpackConf(webpackConfig, filename, env))))

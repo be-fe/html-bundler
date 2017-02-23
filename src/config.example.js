@@ -10,6 +10,7 @@ module.exports = {
     devMod: {
         output: './dev',
         minify: false,
+        minifyHTML: false,
         bundle: true,
         concat: false,
         sourcemap: true,
@@ -18,7 +19,7 @@ module.exports = {
         watchFolder: {
             css: ['./src/css'],
             js: ['./src/js'],
-            imgs: ['./src/imgs'],
+            imgs: ['./src/images'],
             any: ['./src/html']
         },
         server: true,
@@ -28,6 +29,7 @@ module.exports = {
     destMod: {
         output: './dist',
         minify: true,
+        minifyHTML: true,
         bundle: true,
         concat: true,
         less: true,
@@ -38,7 +40,7 @@ module.exports = {
         buildTarget: {
             js: './js/',
             css: './css/',
-            imgs: './image/',
+            imgs: './images/',
             html: './html/'
         },
     },

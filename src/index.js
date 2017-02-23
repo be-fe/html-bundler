@@ -78,6 +78,7 @@ module.exports = function(env, port) {
     var options = [
         'output',
         'minify',
+        'minifyHTML',
         'bundle',
         'sourcemap',
         'concat',
@@ -139,7 +140,7 @@ module.exports = function(env, port) {
         getAbsolutePath(conf.watchFolder.css, '**');
         getAbsolutePath(conf.watchFolder.js, '**');
         getAbsolutePath(conf.watchFolder.imgs, '**');
-        getAbsolutePath(conf.watchFolder.any, '**');
+        getAbsolutePath(conf.watchFolder.html, '**');
     }
 
     /*
@@ -250,7 +251,7 @@ module.exports = function(env, port) {
                 if (type !== 'css') {
                     $('script').each(function(i, item) {
                         var src = $(item).attr('src');
-                        if (!is.url(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
+                        if (src && !is.url(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
                             $(item).remove();
                         }
                     });
@@ -260,7 +261,7 @@ module.exports = function(env, port) {
                 if (type !== 'js') {
                     $('link').each(function(i, item) {
                         var href = $(item).attr('href');
-                        if (!is.url(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
+                        if (href && !is.url(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
                             $(item).remove();
                         }
                     });
@@ -370,7 +371,7 @@ module.exports = function(env, port) {
                 .pipe(gulpif(!conf.inline, findResource(env)))
                 .pipe(gulpif(conf.inline, addInlineAttr()))
                 .pipe(gulpif(conf.inline, inlinesource()))
-                .pipe(gulpif(conf.minify, htmlmin()))
+                .pipe(gulpif(conf.minifyHTML, htmlmin()))
                 .on('error', function() {
                     logger.notice('构建失败::>_<::');
                 })

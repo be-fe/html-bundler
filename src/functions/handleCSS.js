@@ -24,7 +24,7 @@ var handleCSS = function(cssArr, conf, filename, env) {
     }
 
     gulp.src(cssArr)
-        .pipe(gulpif(env !== 'dest', changed(target, {extension: '.css'})))
+        // .pipe(gulpif(env !== 'dest', changed(target, {extension: '.css'})))
         .pipe(plumber())
         .pipe(gulpif(conf.sourcemap, sourcemap.init()))
         .pipe(gulpif(true, debug({title: 'style file build:'})))
