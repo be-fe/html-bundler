@@ -327,7 +327,7 @@ module.exports = function(env, port) {
                     }));
             }
 
-            file.contents = new Buffer($.html());
+            file.contents = new Buffer($.html({xmlMode: false, decodeEntities: false}));
             this.push(file);
 
             cb();
