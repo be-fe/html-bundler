@@ -255,7 +255,7 @@ module.exports = function(env, port) {
                             $(item).remove();
                         }
                     });
-                    $('body').append('<script src="' + jsPath + '"></script>');
+                    $('body').append('<script type="text/javascript" src="' + jsPath + '"></script>');
                 }
 
                 if (type !== 'js') {
@@ -265,7 +265,7 @@ module.exports = function(env, port) {
                             $(item).remove();
                         }
                     });
-                    $('head').append('<link href="' + cssPath + '"/>');
+                    $('head').append('<link rel="stylesheet" type="text/css" href="' + cssPath + '"/>');
                 }
             }
 
