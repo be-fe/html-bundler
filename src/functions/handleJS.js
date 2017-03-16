@@ -53,7 +53,7 @@ var handleJS = function(jsArr, conf, filename, env) {
 
     if (conf.custom && conf.custom.css && conf.custom.css.length) {
         conf.custom.js.forEach(function (task) {
-            stream = stream.pipe(task);
+            stream = stream.pipe(task.func(task.opts));
         })
     }
 

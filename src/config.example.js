@@ -30,7 +30,7 @@ module.exports = {
             css: [],
             imgs: [],
             html: []
-        },//自定义任务
+        },//自定义任务, 格式样例[{func: sass, opts: {logger: true}}, {func: task, opts: null }]
         server: true,
         buildTarget: 'default'
     },

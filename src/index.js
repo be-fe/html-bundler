@@ -378,7 +378,7 @@ module.exports = function(env, port) {
 
             if (conf.custom && conf.custom.html && conf.custom.html.length) {
                 conf.custom.html.forEach(function (task) {
-                    stream = stream.pipe(task);
+                    stream = stream.pipe(task.func(task.opts));
                 });
             }
 
