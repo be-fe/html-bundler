@@ -23,12 +23,19 @@ var handleCSS = function(cssArr, conf, filename, env) {
         var target = path.join(conf.output, conf.buildTarget.css);
     }
 
-    gulp.src(cssArr)
+    var stream = gulp.src(cssArr)
         // .pipe(gulpif(env !== 'dest', changed(target, {extension: '.css'})))
         .pipe(plumber())
         .pipe(gulpif(conf.sourcemap, sourcemap.init()))
-        .pipe(gulpif(true, debug({title: 'style file build:'})))
-        .pipe(gulpif(conf.less, less()))
+        .pipe(gulpif(true, debug({title: 'style file build:'})));
+
+    if (conf.custom && conf.custom.css && conf.custom.css.length) {
+        conf.custom.css.forEach(function (task) {
+            stream = stream.pipe(task);
+        });
+    }
+
+    stream = stream.pipe(gulpif(conf.less, less()))
         .pipe(gulpif(conf.concat, concat(filename + '.css')))
         .pipe(postcss([ autoprefixer({ browsers: ['last 5 versions'] }) ]))
         .pipe(gulpif(conf.minify, cleancss()))

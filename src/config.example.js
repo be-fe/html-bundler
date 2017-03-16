@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
     src: './src',
 
@@ -6,6 +7,8 @@ module.exports = {
     ignore: ['./src/js/lib', './src/css/lib'],
 
     imgFolder: './src/imgs',
+
+    // moveList: ['./src/fonts', './src/a.js'], //需要平移的目录和文件
 
     devMod: {
         output: './dev',
@@ -20,8 +23,14 @@ module.exports = {
             css: ['./src/css'],
             js: ['./src/js'],
             imgs: ['./src/images'],
-            any: ['./src/html']
+            html: ['./src/html']
         },
+        custom: {
+            js: [],
+            css: [],
+            imgs: [],
+            html: []
+        },//自定义任务
         server: true,
         buildTarget: 'default'
     },
@@ -36,6 +45,12 @@ module.exports = {
         inline: false,
         sourcemap: false,
         watchFolder: null,
+        custom: {
+            js: [],
+            css: [],
+            imgs: [],
+            html: []
+        },//自定义任务
         server: false,
         buildTarget: {
             js: './js/',

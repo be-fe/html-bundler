@@ -28,7 +28,7 @@ module.exports = function(env, port) {
     var through = require('through2');
     var cheerio = require('cheerio');
     var path = require('path');
-    var fs = require('fs');
+    var fs = require('fs-extra');
     var process = require('process');
     var is = require('is_js');
 
@@ -38,6 +38,9 @@ module.exports = function(env, port) {
     var currentPath = process.cwd();
 
     var getAbsolutePath = function(origin, extra) {
+        if (!origin) {
+            return;
+        }
         if (!extra) {
             var extra = '';
         }
@@ -85,6 +88,7 @@ module.exports = function(env, port) {
         'less',
         'inline',
         'server',
+        'custom',
         'watchFolder',
         'imgFolder',
         'buildTarget'];
@@ -132,6 +136,8 @@ module.exports = function(env, port) {
     conf.imgSrc = path.join(currentPath, config.imgFolder, './**');
 
     getAbsolutePath(config.entries);
+    getAbsolutePath(config.moveList);
+
 
     /*
      *  handle watchFolder
@@ -367,9 +373,16 @@ module.exports = function(env, port) {
         });
 
         promise.then(function() {
-            gulp.src(config.entries)
+            var stream = gulp.src(config.entries)
                 .pipe(gulpif(!conf.inline, findResource(env)))
-                .pipe(gulpif(conf.inline, addInlineAttr()))
+
+            if (conf.custom && conf.custom.html && conf.custom.html.length) {
+                conf.custom.html.forEach(function (task) {
+                    stream = stream.pipe(task);
+                });
+            }
+
+            stream = stream.pipe(gulpif(conf.inline, addInlineAttr()))
                 .pipe(gulpif(conf.inline, inlinesource()))
                 .pipe(gulpif(conf.minifyHTML, htmlmin()))
                 .on('error', function() {
@@ -379,7 +392,24 @@ module.exports = function(env, port) {
                 .on('end', function() {
                     logger.notice('构建完成=^_^=');
                 })
-        })
+        });
+
+        /*
+         * 将需要copy的目录和文件平移到output目录
+         */
+        if (config.moveList && config.moveList.length) {
+            config.moveList.forEach(function (moveItem) {
+                var pathArr = moveItem.split('/');
+                pathArr.forEach(function(item, index) {
+                    if (!item) {
+                        pathArr.splice(index, 1);
+                    }
+                })
+                var moveItemName = pathArr[pathArr.length - 1];
+                fs.copySync(moveItem, path.join(conf.output, moveItemName));
+            })
+        }
+
 
 
     }

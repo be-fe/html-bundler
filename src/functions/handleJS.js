@@ -46,11 +46,18 @@ var handleJS = function(jsArr, conf, filename, env) {
     else {
         var target = path.join(conf.output, conf.buildTarget.js);
     }
-    gulp.src(jsArr)
+    var stream = gulp.src(jsArr)
         // .pipe(gulpif(env !== 'dest', changed(target, {extension: '.js'})))
         .pipe(gulpif(true, debug({title: 'JS file build:'})))
         .pipe(gulpif(conf.sourcemap, sourcemap.init()))
-        .pipe(gulpif(conf.bundle, webpack(generateWebpackConf(webpackConfig, filename, env))))
+
+    if (conf.custom && conf.custom.css && conf.custom.css.length) {
+        conf.custom.js.forEach(function (task) {
+            stream = stream.pipe(task);
+        })
+    }
+
+    stream = stream.pipe(gulpif(conf.bundle, webpack(generateWebpackConf(webpackConfig, filename, env))))
         .pipe(gulpif(conf.minify, uglify()))
         .pipe(gulpif(conf.concat, concat(filename + '.js')))
         .pipe(gulpif(conf.sourcemap, sourcemap.write()))

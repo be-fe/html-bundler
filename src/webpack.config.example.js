@@ -1,3 +1,4 @@
+/* eslint-disable */
 var webpack = require('webpack');
 var HappyPack = require('happypack');
 var happyThreadPool = HappyPack.ThreadPool({ size: 8 });
