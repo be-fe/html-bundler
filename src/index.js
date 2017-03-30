@@ -133,7 +133,7 @@ module.exports = function(env, port) {
 
     conf.src = path.join(currentPath, config.src);
     conf.output = path.join(currentPath, conf.output);
-    conf.imgSrc = path.join(currentPath, config.imgFolder, './**');
+    config.imgFolder && (conf.imgSrc = path.join(currentPath, config.imgFolder, './**'));
 
     getAbsolutePath(config.entries);
     getAbsolutePath(config.moveList);
@@ -361,11 +361,13 @@ module.exports = function(env, port) {
 
         var promise = new Promise((resolve, reject) => {
             if (env !== 'js' && env !== 'css') {
-                logger.notice('执行图片复制');
-                gulp.src(conf.imgSrc)
-                    .on('error', reject)
-                    .pipe(gulp.dest(imageTarget))
-                    .on('end', resolve)
+                if (conf.imgSrc) {
+                    logger.notice('执行图片复制');
+                    gulp.src(conf.imgSrc)
+                        .on('error', reject)
+                        .pipe(gulp.dest(imageTarget))
+                        .on('end', resolve)
+                }
             }
             else {
                 resolve();
