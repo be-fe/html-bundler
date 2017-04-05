@@ -255,23 +255,37 @@ module.exports = function(env, port) {
                 var jsPath = path.join(path.relative(htmlOutput, jsOutput), filename +'.js') + '?v=' + timeStamp;
                 var cssPath = path.join(path.relative(htmlOutput, cssOutput), filename +'.css') + '?v=' + timeStamp;;
                 if (type !== 'css') {
+                    var JSAppended = false;
                     $('script').each(function(i, item) {
                         var src = $(item).attr('src');
+                        $(item).remove();
                         if (src && !is.url(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
-                            $(item).remove();
+                            if (!JSAppended) {
+                                $('body').append('<script type="text/javascript" src="' + jsPath + '"></script>');
+                                JSAppended = true;
+                            }
+                        }
+                        else {
+                            $('body').append($(item));
                         }
                     });
-                    $('body').append('<script type="text/javascript" src="' + jsPath + '"></script>');
                 }
 
                 if (type !== 'js') {
+                    var CSSAppended = false;
                     $('link').each(function(i, item) {
                         var href = $(item).attr('href');
+                        $(item).remove();
                         if (href && !is.url(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
-                            $(item).remove();
+                            if (!CSSAppended) {
+                                $('head').append('<link rel="stylesheet" type="text/css" href="' + cssPath + '"/>');
+                                CSSAppended = true
+                            }
+                        }
+                        else {
+                            $('head').append($(item));
                         }
                     });
-                    $('head').append('<link rel="stylesheet" type="text/css" href="' + cssPath + '"/>');
                 }
             }
 
