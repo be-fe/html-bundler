@@ -28,10 +28,11 @@ var handleJS = function(jsArr, conf, filename, env) {
             }
             else {
                 if (originConf.output) {
-                    originConf.output.filename = filename + ".js"
+                    originConf.output = _.assign({}, originConf.output);
+                    originConf.output.filename = filename + ".js";
                 }
                 else {
-                    originConf.output = {filename: filename + ".js"}
+                    originConf.output = {filename: filename + ".js"};
                 }
             }
 
