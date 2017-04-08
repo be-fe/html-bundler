@@ -11,6 +11,7 @@ var currentPath = process.cwd();
 var debug = require('gulp-debug');
 var fs = require('fs');
 var logger = require('../utils/logger');
+var _ = require('lodash');
 
 var handleJS = function(jsArr, conf, filename, env) {
     if (conf.bundle) {
