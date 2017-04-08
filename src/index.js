@@ -215,7 +215,8 @@ module.exports = function(env, port) {
             var getPath = function(item, arr, attr) {
                 var originPath = item.attr(attr);
                 if (is.string(originPath) && !is.url(originPath)) {
-                    var result = path.join(file.base, originPath);
+                    var htmlPath = path.dirname(file.path);
+                    var result = path.join(htmlPath, originPath);
                     if (!isIgnore(result, config.ignore)) {
                         arr.push(result);
                     }
