@@ -12,6 +12,7 @@ var debug = require('gulp-debug');
 var fs = require('fs');
 var logger = require('../utils/logger');
 var _ = require('lodash');
+var gutil = require('gulp-util');
 
 var handleJS = function(jsArr, conf, filename, env) {
     if (conf.bundle) {
@@ -65,6 +66,11 @@ var handleJS = function(jsArr, conf, filename, env) {
     }
 
     stream = stream.pipe(gulpif(conf.bundle, webpack(generateWebpackConf(webpackConfig, filename, env))))
+        .on('error', function(err) {
+            // 这样语法错误不会打断watcher和server
+            gutil.log('WEBPACK ERROR', gutil.colors.red(err.message));
+            this.emit('end');
+        })
         .pipe(gulpif(conf.minify, uglify()))
         .pipe(gulpif(conf.concat, concat(filename + '.js')))
         .pipe(gulpif(conf.sourcemap, sourcemap.write()))
