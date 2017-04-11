@@ -37,7 +37,6 @@ var handleJS = function(jsArr, conf, filename, env) {
                     originConf.output = {filename: filename + ".js"};
                 }
             }
-
             return originConf;
         }
     }

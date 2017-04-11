@@ -248,7 +248,8 @@ module.exports = function(env, port) {
 
 
             var replaceResource = function(type) {
-                var htmlOutput = path.join(conf.output, conf.buildTarget.html);
+                var htmlDir = path.relative(file.base, path.dirname(file.path));
+                var htmlOutput = path.join(conf.output, conf.buildTarget.html, htmlDir);
                 var jsOutput = path.join(conf.output, conf.buildTarget.js);
                 var cssOutput = path.join(conf.output, conf.buildTarget.css);
                 var imgsOutput = path.join(conf.output, conf.buildTarget.imgs);
