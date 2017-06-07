@@ -79,6 +79,7 @@ module.exports = function(env, port) {
     var conf = {};
 
     var options = [
+        'entries'
         'output',
         'minify',
         'minifyHTML',
@@ -96,6 +97,12 @@ module.exports = function(env, port) {
     options.forEach(function(item) {
         if (env === 'dest') {
             conf[item] = config.destMod[item];
+        }
+        else if (env === 'rd') {
+            conf[item] = config.rdMod[item];
+        }
+        else if (env === 'qa') {
+            conf[item] = config.qaMod[item];
         }
         else {
             conf[item] = config.devMod[item];
@@ -135,6 +142,9 @@ module.exports = function(env, port) {
     conf.output = path.join(currentPath, conf.output);
     config.imgFolder && (conf.imgSrc = path.join(currentPath, config.imgFolder, './**'));
 
+    if (conf.entries) {
+        getAbsolutePath(conf.entries);
+    }
     getAbsolutePath(config.entries);
     getAbsolutePath(config.moveList);
 
@@ -393,7 +403,8 @@ module.exports = function(env, port) {
         });
 
         promise.then(function() {
-            var stream = gulp.src(config.entries)
+            var entries = conf.entries || config.entries;
+            var stream = gulp.src(entries)
                 .pipe(gulpif(!conf.inline, findResource(env)))
 
             if (conf.custom && conf.custom.html && conf.custom.html.length) {

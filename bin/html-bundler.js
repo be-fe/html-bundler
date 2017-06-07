@@ -14,6 +14,7 @@ const DEFAULT_WEBPACK_CONFIG = path.join(__dirname, '../src/webpack.config.examp
 const REAL_WEBPACK_CONFIG = path.join(currentPath, './webpack.config.js');
 const DEFAULT_STRUCTURE = path.join(__dirname, '../src/structure');
 
+
 /*
  * 如果不存在则创建html-bundler.config.js和webpack.config.js, 根据自己项目进行修改
  */
@@ -67,6 +68,24 @@ commander.command('dest')
     .description('dest')
     .action(function() {
         htmlBundler('dest');
+    })
+
+/*
+ * QA环境打包
+ */
+commander.command('qa')
+    .description('qa')
+    .action(function() {
+        htmlBundler('qa');
+    })
+
+/*
+ * RD环境打包
+ */
+commander.command('rd')
+    .description('rd')
+    .action(function() {
+        htmlBundler('rd');
     })
 
 commander.parse(process.argv);

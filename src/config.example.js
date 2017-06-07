@@ -11,6 +11,7 @@ module.exports = {
     // moveList: ['./src/fonts', './src/a.js'], //需要平移的目录和文件
 
     devMod: {
+        entries: ['./src/html/**', './src/*.html'], //dev模式下内部的会覆盖外部的
         output: './dev',
         minify: false,
         minifyHTML: false,
@@ -36,6 +37,56 @@ module.exports = {
     },
 
     destMod: {
+        output: './dist',
+        minify: true,
+        minifyHTML: true,
+        bundle: true,
+        concat: true,
+        less: true,
+        inline: false,
+        sourcemap: false,
+        watchFolder: null,
+        custom: {
+            js: [],
+            css: [],
+            imgs: [],
+            html: []
+        },//自定义任务
+        server: false,
+        buildTarget: {
+            js: './js/',
+            css: './css/',
+            imgs: './images/',
+            html: './html/'
+        },
+    },
+
+    rdMod: {
+        output: './dist',
+        minify: true,
+        minifyHTML: true,
+        bundle: true,
+        concat: true,
+        less: true,
+        inline: false,
+        sourcemap: false,
+        watchFolder: null,
+        custom: {
+            js: [],
+            css: [],
+            imgs: [],
+            html: []
+        },//自定义任务
+        server: false,
+        buildTarget: {
+            js: './js/',
+            css: './css/',
+            imgs: './images/',
+            html: './html/'
+        },
+    },
+
+    qaMod: {
         output: './dist',
         minify: true,
         minifyHTML: true,
