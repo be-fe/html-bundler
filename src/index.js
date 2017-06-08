@@ -24,6 +24,7 @@ module.exports = function(env, port) {
     var handleJS = require('./functions/handleJS.js');
     var handleCSS = require('./functions/handleCSS.js');
     var handleImage = require('./functions/handleImage.js');
+    var handleCount = require('./functions/handleCount.js');
 
     var through = require('through2');
     var cheerio = require('cheerio');
@@ -79,7 +80,7 @@ module.exports = function(env, port) {
     var conf = {};
 
     var options = [
-        'entries'
+        'entries',
         'output',
         'minify',
         'minifyHTML',
@@ -90,6 +91,7 @@ module.exports = function(env, port) {
         'inline',
         'server',
         'custom',
+        'codeCount',
         'watchFolder',
         'imgFolder',
         'buildTarget'];
@@ -421,6 +423,9 @@ module.exports = function(env, port) {
                 })
                 .pipe(gulp.dest(htmlTarget))
                 .on('end', function() {
+                    if (conf.codeCount) {
+                       handleCount();
+                    }
                     logger.notice('构建完成=^_^=');
                 })
         });

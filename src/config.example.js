@@ -20,6 +20,7 @@ module.exports = {
         sourcemap: true,
         less: true,
         inline: false,
+        codeCount: false, //代码统计
         watchFolder: {
             css: ['./src/css'],
             js: ['./src/js'],
@@ -44,6 +45,7 @@ module.exports = {
         concat: true,
         less: true,
         inline: false,
+        codeCount: true, //代码统计
         sourcemap: false,
         watchFolder: null,
         custom: {
@@ -69,6 +71,7 @@ module.exports = {
         concat: true,
         less: true,
         inline: false,
+        codeCount: true, //代码统计
         sourcemap: false,
         watchFolder: null,
         custom: {
@@ -94,6 +97,7 @@ module.exports = {
         concat: true,
         less: true,
         inline: false,
+        codeCount: true, //代码统计
         sourcemap: false,
         watchFolder: null,
         custom: {
