@@ -19,6 +19,8 @@ html-bundler的特点：
 
 
 ### Globle Mod
+适用于一些只需要简单压缩合并的活动项目，或者一些demo页
+
 ```sh
 npm install html-bundler -g
 ```
@@ -44,6 +46,8 @@ hb dest
 ```
 
 ### Local Mod
+适用于正式项目
+
 ```sh
 cd your-project
 npm install html-bundler --save-dev
@@ -154,4 +158,15 @@ module.exports = {
 }
 
 ```
+
+### 开发计划
+
+1. 使用webpack-dev-server优化JS打包效率
+2. ~~支持RD, QA, DEV, ONLINE四种环境~~
+3. riot脚手架
+4. mobile样式脚手架
+5. ~~代码统计~~
+6. ~~自定义任务~~
+7. ~~webpack和less出错不会中断~~
+8. 优化输出（当前输出顺序不对）
 

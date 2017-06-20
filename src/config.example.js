@@ -6,12 +6,12 @@ module.exports = {
 
     ignore: ['./src/js/lib', './src/css/lib'],
 
-    imgFolder: './src/imgs',
+    imgFolder: './src/images',
 
     // moveList: ['./src/fonts', './src/a.js'], //需要平移的目录和文件
 
     devMod: {
-        entries: ['./src/html/**', './src/*.html'], //dev模式下内部的会覆盖外部的
+        entries: ['./src/html/**', './src/*.html'], //每种模式下内部的entries会覆盖外部的
         output: './dev',
         minify: false,
         minifyHTML: false,
