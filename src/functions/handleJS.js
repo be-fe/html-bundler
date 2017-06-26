@@ -18,7 +18,7 @@ var gutil = require('gulp-util');
 var handleJS = function(jsArr, conf, filename, env) {
     if (conf.bundle) {
         if (!fs.existsSync(path.join(currentPath, './webpack.config.js'))) {
-            var webpackConfig = require('../webpack.config.default.js');
+            var webpackConfig = require('../webpack.config.example.js');
         }
         else {
             var webpackConfig = require(path.join(currentPath, './webpack.config'));

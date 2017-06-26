@@ -1,3 +1,53 @@
+var destMod = {
+    output: './dist/dest',
+    minify: true,
+    minifyHTML: true,
+    bundle: true,
+    concat: true,
+    less: true,
+    inline: false,
+    codeCount: true, //代码统计
+    sourcemap: false,
+    watchFolder: null,
+    custom: {
+        js: [],
+        css: [],
+        imgs: [],
+        html: []
+    },//自定义任务
+    define: {
+        __DEST__: true,
+        __DEV__: false,
+        __RD__: false,
+        __QA__: false
+    },
+    server: false,
+    buildTarget: {
+        js: './js/',
+        css: './css/',
+        imgs: './images/',
+        html: './html/'
+    },
+};
+
+var rdMod = Object.assign({}, destMod);
+var qaMod = Object.assign({}, destMod);
+
+rdMod.output = './dist/rd';
+qaMod.output = './dist/qa';
+rdMod.define = {
+    __DEST__: false,
+    __DEV__: false,
+    __RD__: true,
+    __QA__: false
+};
+qaMod.define = {
+    __DEST__: false,
+    __DEV__: false,
+    __RD__: false,
+    __QA__: true
+};
+
 /* eslint-disable */
 module.exports = {
     src: './src',
@@ -27,6 +77,12 @@ module.exports = {
             imgs: ['./src/images'],
             html: ['./src/html']
         },
+        define: {
+            __DEST__: false,
+            __DEV__: true,
+            __RD__: false,
+            __QA__: false
+        }, //webpack环境变量定义，非webpack模式不生效
         custom: {
             js: [],
             css: [],
@@ -37,83 +93,11 @@ module.exports = {
         buildTarget: 'default'
     },
 
-    destMod: {
-        output: './dist',
-        minify: true,
-        minifyHTML: true,
-        bundle: true,
-        concat: true,
-        less: true,
-        inline: false,
-        codeCount: true, //代码统计
-        sourcemap: false,
-        watchFolder: null,
-        custom: {
-            js: [],
-            css: [],
-            imgs: [],
-            html: []
-        },//自定义任务
-        server: false,
-        buildTarget: {
-            js: './js/',
-            css: './css/',
-            imgs: './images/',
-            html: './html/'
-        },
-    },
+    destMod: destMod,
 
-    rdMod: {
-        output: './dist',
-        minify: true,
-        minifyHTML: true,
-        bundle: true,
-        concat: true,
-        less: true,
-        inline: false,
-        codeCount: true, //代码统计
-        sourcemap: false,
-        watchFolder: null,
-        custom: {
-            js: [],
-            css: [],
-            imgs: [],
-            html: []
-        },//自定义任务
-        server: false,
-        buildTarget: {
-            js: './js/',
-            css: './css/',
-            imgs: './images/',
-            html: './html/'
-        },
-    },
+    rdMod: rdMod,
 
-    qaMod: {
-        output: './dist',
-        minify: true,
-        minifyHTML: true,
-        bundle: true,
-        concat: true,
-        less: true,
-        inline: false,
-        codeCount: true, //代码统计
-        sourcemap: false,
-        watchFolder: null,
-        custom: {
-            js: [],
-            css: [],
-            imgs: [],
-            html: []
-        },//自定义任务
-        server: false,
-        buildTarget: {
-            js: './js/',
-            css: './css/',
-            imgs: './images/',
-            html: './html/'
-        },
-    },
+    qaMod: qaMod,
 
     birdConfig: {
         basePath: "./dev",

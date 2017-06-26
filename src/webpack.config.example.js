@@ -10,8 +10,7 @@ var commonConf = {
             {
                 test: /\.tag$/,
                 exclude: /node_modules/,
-                loader: ['babel-loader?presets=es2015', 'riotjs-loader'],
-                query: { type: 'none' }
+                loader: ['babel-loader?presets=es2015', 'riotjs-loader']
             }
         ],
         loaders: [
@@ -70,10 +69,6 @@ var webpackConf = {
                 cache: true,
                 threadPool: happyThreadPool,
                 loaders: [ 'babel-loader?presets=es2015' ]
-            }),
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': 'dev',
-                __DEV__: true,
             })
         ],
         module: commonConf.module,
@@ -90,54 +85,15 @@ var webpackConf = {
                 cache: false,
                 threadPool: happyThreadPool,
                 loaders: [ 'babel-loader?presets=es2015' ]
-            }),
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': 'prod',
-                __PROD__: true,
-            })
-        ],
-        module: commonConf.module,
-        resolve: commonConf.resolve
-    },
-
-    qa: {
-        devtool: null,
-        cache: false,
-        plugins: [
-            new HappyPack({
-                id: 'js',
-                cache: false,
-                threadPool: happyThreadPool,
-                loaders: [ 'babel-loader?presets=es2015' ]
-            }),
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': 'qa',
-                __QA__: true,
-            })
-        ],
-        module: commonConf.module,
-        resolve: commonConf.resolve
-    },
-
-    rd: {
-        devtool: null,
-        cache: false,
-        plugins: [
-            new HappyPack({
-                id: 'js',
-                cache: false,
-                threadPool: happyThreadPool,
-                loaders: [ 'babel-loader?presets=es2015' ]
-            }),
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': 'rd',
-                __RD__: true,
             })
         ],
         module: commonConf.module,
         resolve: commonConf.resolve
     }
-
 };
+
+//一般来说，RD环境和QA环境打包配置和dest是一致的，但是需要不同的环境变量配置一些参数
+webpackConf.rd = Object.assign(webpackConf.dest, {});
+webpackConf.qa = Object.assign(webpackConf.dest, {});
 
 module.exports = webpackConf;
