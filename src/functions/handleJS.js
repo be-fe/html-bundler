@@ -2,6 +2,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemap = require('gulp-sourcemaps');
 var webpack = require('webpack-stream');
+var originWebpack = require('webpack');
 var changed = require('gulp-changed');
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
@@ -25,6 +26,7 @@ var handleJS = function(jsArr, conf, filename, env) {
 
         var generateWebpackConf = function(webpackConfig, filename, env) {
             var originConf = webpackConfig[env];
+            var hasDefinePlugin;
             if (!is.object(originConf)) {
                 return
             }
@@ -35,6 +37,29 @@ var handleJS = function(jsArr, conf, filename, env) {
                 }
                 else {
                     originConf.output = {filename: filename + ".js"};
+                }
+            }
+
+            for (var i = 0; i < originConf.plugins.length; i++) {
+                if (originConf.plugins[i] instanceof originWebpack.DefinePlugin) {
+                    hasDefinePlugin = true;
+                }
+            }
+
+            //definePlugin规则：webpack.conf中的声明 > hb.conf中的声明 > 默认规则
+            if (!hasDefinePlugin) {
+                if (!conf.define || (typeof conf.define !== 'object')) {
+                    var defineObj = {'process.env.NODE_ENV': env};
+                    defineObj['__' + env.toUpperCase() + '__'] = true;
+                    originConf.plugins.push(
+                        new originWebpack.DefinePlugin(defineObj)
+                    );
+                }
+                else {
+                    var defineObj = Object.assign({'process.env.NODE_ENV': env}, conf.define);
+                    originConf.plugins.push(
+                        new originWebpack.DefinePlugin(defineObj)
+                    );
                 }
             }
             return originConf;
@@ -69,6 +94,9 @@ var handleJS = function(jsArr, conf, filename, env) {
             // 这样语法错误不会打断watcher和server
             gutil.log('WEBPACK ERROR', gutil.colors.red(err.message));
             this.emit('end');
+        })
+        .on('end', function(res) {
+            //这是每个entry打包后end的时候，不是所有entry打包完成后，所以不能在这里输出end
         })
         .pipe(gulpif(conf.minify, uglify()))
         .pipe(gulpif(conf.concat, concat(filename + '.js')))

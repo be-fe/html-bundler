@@ -94,21 +94,11 @@ module.exports = function(env, port) {
         'codeCount',
         'watchFolder',
         'imgFolder',
+        'define',
         'buildTarget'];
 
     options.forEach(function(item) {
-        if (env === 'dest') {
-            conf[item] = config.destMod[item];
-        }
-        else if (env === 'rd') {
-            conf[item] = config.rdMod[item];
-        }
-        else if (env === 'qa') {
-            conf[item] = config.qaMod[item];
-        }
-        else {
-            conf[item] = config.devMod[item];
-        }
+        conf[item] = config[env + 'Mod'][item];
     })
 
     /*
