@@ -15,13 +15,18 @@ var logger = require('../utils/logger');
 var _ = require('lodash');
 var gutil = require('gulp-util');
 
-var handleJS = function(jsArr, conf, filename, env) {
+var handleJS = function(jsArr, conf, filename, env, wpconfig) {
     if (conf.bundle) {
-        if (!fs.existsSync(path.join(currentPath, './webpack.config.js'))) {
-            var webpackConfig = require('../webpack.config.example.js');
+        if (wpconfig) {
+            var webpackConfig = wpconfig;
         }
         else {
-            var webpackConfig = require(path.join(currentPath, './webpack.config'));
+            if (!fs.existsSync(path.join(currentPath, './webpack.config.js'))) {
+                var webpackConfig = require('../webpack.config.example.js');
+            }
+            else {
+                var webpackConfig = require(path.join(currentPath, './webpack.config'));
+            }
         }
 
         var generateWebpackConf = function(webpackConfig, filename, env) {

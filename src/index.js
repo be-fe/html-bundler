@@ -10,7 +10,7 @@ Array.prototype.unique = function () {
     return res;
 }
 
-module.exports = function(env, port) {
+module.exports = function(env, port, hbconfig, wpconfig) {
     var gulp = require('gulp');
     var gulpif = require('gulp-if');
     var inlinesource = require('gulp-inline-source');
@@ -58,13 +58,13 @@ module.exports = function(env, port) {
     /*
      * 文件缺失容错处理
      */
-    if (!fs.existsSync(path.join(currentPath, './html-bundler.config.js'))) {
-        logger.error('当前目录下缺少html-bundler.config.js 配置文件，请使用`hb init`或自己手动创建。');
-        return
-    }
+    // if (!fs.existsSync(path.join(currentPath, './html-bundler.config.js'))) {
+    //     logger.error('当前目录下缺少html-bundler.config.js 配置文件，请使用`hb init`或自己手动创建。');
+    //     return
+    // }
 
     try {
-        var config = require(path.join(currentPath, './html-bundler.config'));
+        var config = hbconfig || require(path.join(currentPath, './html-bundler.config'));
     } catch(e) {
         logger.error('html-bundler.config.js 配置文件出现错误');
         return
@@ -330,7 +330,7 @@ module.exports = function(env, port) {
             }
 
             if (handleLimit === 'js') {
-                handleJS(jsArr, conf, filename, env);
+                handleJS(jsArr, conf, filename, env, wpconfig);
             }
             else if (handleLimit === 'css') {
                 handleCSS(cssArr, conf, filename, env);
@@ -339,7 +339,7 @@ module.exports = function(env, port) {
                 handleImage(imgArr, conf, filename, env);
             }
             else {
-                handleJS(jsArr, conf, filename, env);
+                handleJS(jsArr, conf, filename, env, wpconfig);
                 handleCSS(cssArr, conf, filename, env);
                 handleImage(imgArr, conf, filename, env);
             }
