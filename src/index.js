@@ -432,7 +432,10 @@ module.exports = function(env, port, hbconfig, wpconfig) {
                     }
                 })
                 var moveItemName = pathArr[pathArr.length - 1];
-                fs.copySync(moveItem, path.join(conf.output, moveItemName));
+                if (fs.existsSync(moveItem)) {
+                    fs.copySync(moveItem, path.join(conf.output, moveItemName));
+                }
+
             })
         }
 
