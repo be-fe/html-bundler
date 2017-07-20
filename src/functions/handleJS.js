@@ -12,8 +12,11 @@ var currentPath = process.cwd();
 var debug = require('gulp-debug');
 var fs = require('fs');
 var logger = require('../utils/logger');
+var network = require('../utils/network');
 var _ = require('lodash');
 var gutil = require('gulp-util');
+
+var htmlCount = 0;
 
 var handleJS = function(jsArr, conf, filename, env, wpconfig) {
     if (conf.bundle) {
@@ -100,13 +103,19 @@ var handleJS = function(jsArr, conf, filename, env, wpconfig) {
             gutil.log('WEBPACK ERROR', gutil.colors.red(err.message));
             this.emit('end');
         })
-        .on('end', function(res) {
-            //这是每个entry打包后end的时候，不是所有entry打包完成后，所以不能在这里输出end
-        })
         .pipe(gulpif(conf.minify, uglify()))
         .pipe(gulpif(conf.concat, concat(filename + '.js')))
         .pipe(gulpif(conf.sourcemap, sourcemap.write()))
         .pipe(gulp.dest(target))
+        .on('end', function(res) {
+            //这是每个entry打包后end的时候，不是所有entry打包完成后，所以不能在这里输出end
+            htmlCount ++;
+            if(fs.readdirSync(currentPath + '/' + env + '/html').length === htmlCount) {
+                htmlCount = 0;
+                logger.notice('构建完成=^_^=');
+                conf.server ? logger.info('Server Address: ' + 'http://' +network.getIPAddress() + ':' + network.port) : null;
+            }
+        })
 }
 
 module.exports = handleJS;
