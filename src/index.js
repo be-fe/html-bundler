@@ -416,7 +416,9 @@ module.exports = function(env, port, hbconfig, wpconfig) {
                     if (conf.codeCount) {
                        handleCount();
                     }
-                    // logger.notice('构建完成=^_^=');
+                    if (!conf.bundle) { // 不用webpack打包时直接输出
+                        logger.notice('构建完成=^_^=');
+                    }
                 })
         });
 
