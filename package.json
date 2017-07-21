@@ -30,6 +30,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-connect": "5.0.0",
     "gulp-debug": "3.0.0",
+    "gulp-file-count": "1.0.3",
     "gulp-if": "^2.0.2",
     "gulp-inline-source": "^3.0.0",
     "gulp-less": "^3.3.0",

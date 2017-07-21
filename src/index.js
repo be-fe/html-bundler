@@ -16,6 +16,7 @@ module.exports = function(env, port, hbconfig, wpconfig) {
     var inlinesource = require('gulp-inline-source');
     var htmlmin = require('gulp-minify-html');
     var base64 = require('gulp-base64');
+    var count = require('gulp-file-count');
     var del = require('del');
 
 
@@ -35,6 +36,7 @@ module.exports = function(env, port, hbconfig, wpconfig) {
 
     var logger = require('./utils/logger.js');
     var isIgnore = require('./utils/isIgnore.js');
+    var gulpFileCount = require('./utils/gulpFileCount.js');
 
     var currentPath = process.cwd();
 
@@ -397,6 +399,12 @@ module.exports = function(env, port, hbconfig, wpconfig) {
         promise.then(function() {
             var entries = conf.entries || config.entries;
             var stream = gulp.src(entries)
+                .pipe(count({
+                    // message: '<%= files %>? That\'s ## too many!',
+                    getFileCount: function(entriesCount) {
+                        gulpFileCount.filecount = entriesCount;
+                    }
+                }))
                 .pipe(gulpif(!conf.inline, findResource(env)))
 
             if (conf.custom && conf.custom.html && conf.custom.html.length) {
@@ -416,7 +424,9 @@ module.exports = function(env, port, hbconfig, wpconfig) {
                     if (conf.codeCount) {
                        handleCount();
                     }
-                    logger.notice('构建完成=^_^=');
+                    if (!conf.bundle) { // 不用webpack打包时直接输出
+                        logger.notice('构建完成=^_^=');
+                    }
                 })
         });
 

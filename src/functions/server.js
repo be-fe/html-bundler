@@ -1,4 +1,5 @@
 var logger = require('../utils/logger');
+var network = require('../utils/network');
 var bird = require('gulp-bird');
 var connect = require('gulp-connect');
 var is = require('is_js');
@@ -8,6 +9,7 @@ var currentPath = process.cwd();
 module.exports = function(usage, config, port) {
 
     var port = port || '8008';
+    network.port = port;
 
     if (usage === 'bird' && is.object(config.birdConfig)) {
         var birdconf = config.birdConfig;
