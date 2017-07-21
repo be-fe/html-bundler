@@ -1,7 +1,7 @@
 var os = require('os');
 
 var network =  {
-    port: '',
+    port: '8008',
     getIPAddress: function() {
     　　var interfaces = os.networkInterfaces();
     　　for (var devName in interfaces) {

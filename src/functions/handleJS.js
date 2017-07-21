@@ -13,6 +13,7 @@ var debug = require('gulp-debug');
 var fs = require('fs');
 var logger = require('../utils/logger');
 var network = require('../utils/network');
+var gulpFileCount = require('../utils/gulpFileCount');
 var _ = require('lodash');
 var gutil = require('gulp-util');
 
@@ -110,10 +111,10 @@ var handleJS = function(jsArr, conf, filename, env, wpconfig) {
         .on('end', function(res) {
             //这是每个entry打包后end的时候，不是所有entry打包完成后，所以不能在这里输出end
             htmlCount ++;
-            if(fs.readdirSync(currentPath + '/' + env + '/html').length === htmlCount) {
+            if(gulpFileCount.filecount && gulpFileCount.filecount === htmlCount) {
                 htmlCount = 0;
                 logger.notice('构建完成=^_^=');
-                conf.server ? logger.info('Server Address: ' + 'http://' +network.getIPAddress() + ':' + network.port) : null;
+                conf.server ? logger.info('Server Address: ' + 'http://' + network.getIPAddress() + ':' + network.port) : null;
             }
         })
 }
