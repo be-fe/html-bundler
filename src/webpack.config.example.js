@@ -10,7 +10,7 @@ var commonConf = {
             {
                 test: /\.tag$/,
                 exclude: /node_modules/,
-                loader: ['babel-loader?presets=es2015', 'riotjs-loader']
+                loader: ['babel-loader?presets=latest', 'riotjs-loader']
             }
         ],
         loaders: [
@@ -68,7 +68,7 @@ var webpackConf = {
                 id: 'js',
                 cache: true,
                 threadPool: happyThreadPool,
-                loaders: [ 'babel-loader?presets=es2015' ]
+                loaders: [ 'babel-loader?presets=latest' ]
             })
         ],
         module: commonConf.module,
@@ -84,7 +84,7 @@ var webpackConf = {
                 id: 'js',
                 cache: false,
                 threadPool: happyThreadPool,
-                loaders: [ 'babel-loader?presets=es2015' ]
+                loaders: [ 'babel-loader?presets=latest' ]
             })
         ],
         module: commonConf.module,
