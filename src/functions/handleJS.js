@@ -58,14 +58,14 @@ var handleJS = function(jsArr, conf, filename, env, wpconfig) {
             //definePlugin规则：webpack.conf中的声明 > hb.conf中的声明 > 默认规则
             if (!hasDefinePlugin) {
                 if (!conf.define || (typeof conf.define !== 'object')) {
-                    var defineObj = {'process.env.NODE_ENV': env};
+                    var defineObj = {'process.env.NODE_ENV': JSON.stringify(env)};
                     defineObj['__' + env.toUpperCase() + '__'] = true;
                     originConf.plugins.push(
                         new originWebpack.DefinePlugin(defineObj)
                     );
                 }
                 else {
-                    var defineObj = Object.assign({'process.env.NODE_ENV': env}, conf.define);
+                    var defineObj = Object.assign({'process.env.NODE_ENV': JSON.stringify(env)}, conf.define);
                     originConf.plugins.push(
                         new originWebpack.DefinePlugin(defineObj)
                     );
