@@ -27,7 +27,8 @@ var handleCSS = function(cssArr, conf, filename, env) {
         // .pipe(gulpif(env !== 'dest', changed(target, {extension: '.css'})))
         .pipe(plumber())
         .pipe(gulpif(conf.sourcemap, sourcemap.init()))
-        .pipe(gulpif(true, debug({title: 'style file build:'})));
+        .pipe(gulpif(true, debug({title: 'style file build:'})))
+        .pipe(gulpif(conf.less, less()));
 
     if (conf.custom && conf.custom.css && conf.custom.css.length) {
         conf.custom.css.forEach(function (task) {
@@ -35,8 +36,7 @@ var handleCSS = function(cssArr, conf, filename, env) {
         });
     }
 
-    stream = stream.pipe(gulpif(conf.less, less()))
-        .pipe(gulpif(conf.concat, concat(filename + '.css')))
+    stream = stream.pipe(gulpif(conf.concat, concat(filename + '.css')))
         .pipe(postcss([ autoprefixer({ browsers: ['last 5 versions'] }) ]))
         .pipe(gulpif(conf.minify, cleancss()))
         // .pipe(gulpif(conf.base64, base64(conf.base64)))

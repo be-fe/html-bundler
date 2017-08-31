@@ -22,7 +22,7 @@ module.exports = function(usage, config, port) {
             targetServer: birdconf.targetServer,
             ajaxOnly: birdconf.ajaxOnly
         };
-        bird.start(server, TranspondRules);
+        bird.start(server, TranspondRules, birdconf.toolsConf);
         logger.info('Bird server runing at port: ' + port + '.');
     }
     else if (usage && is.object(config.serverConfig)) {
