@@ -6,14 +6,12 @@ var happyThreadPool = HappyPack.ThreadPool({ size: 8 });
 var commonConf = {
     module: {
         //各种加载器，即让各种文件格式可用require引用
-        preLoaders: [
+        loaders: [
             {
                 test: /\.tag$/,
                 exclude: /node_modules/,
                 loader: ['babel-loader?presets=latest', 'riotjs-loader']
-            }
-        ],
-        loaders: [
+            },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
