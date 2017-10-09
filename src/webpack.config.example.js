@@ -90,6 +90,18 @@ var webpackConf = {
     }
 };
 
+try {
+    var dllref = new webpack.DllReferencePlugin({
+        context: path.join(__dirname),
+        manifest: require('./manifest.json'),
+    });
+    webpackConf.dev.plugins.unshift(dllref);
+    webpackConf.dest.plugins.unshift(dllref);
+}
+catch(e) {
+    console.log(e);
+}
+
 //一般来说，RD环境和QA环境打包配置和dest是一致的，但是需要不同的环境变量配置一些参数
 webpackConf.rd = Object.assign(webpackConf.dest, {});
 webpackConf.qa = Object.assign(webpackConf.dest, {});
