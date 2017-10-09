@@ -92,7 +92,7 @@ var webpackConf = {
 
 try {
     var dllref = new webpack.DllReferencePlugin({
-        context: path.join(__dirname),
+        context: __dirname,
         manifest: require('./manifest.json'),
     });
     webpackConf.dev.plugins.unshift(dllref);
