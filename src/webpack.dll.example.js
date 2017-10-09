@@ -1,32 +1,29 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 
-var vendors = [
-  /*
-   * 请在这里填写你的依赖
-   */
-];
-var webpackConf = {
-    output: {
-        path: path.join(__dirname, './/lib'),
-        filename: 'vendors.js',
-        library: 'vendors',
-    },
-    entry: {
-        vendor: vendors,
-    },
-    plugins: [
-        new webpack.DllPlugin({
-            path: 'manifest.json',
-            name: 'vendors',
-            context: path.join(__dirname),
-        }),
-        new webpack.optimize.UglifyJsPlugin()
-    ],
+const vendors = [];
+
+const options = {
+  output: {
+    path: path.join(__dirname, 'src/lib'),
+    filename: 'vendors.js',
+    library: 'vendors',
+  },
+  entry: {
+    vendor: vendors,
+  },
+  plugins: [
+    new webpack.DllPlugin({
+      path: 'manifest.json',
+      name: 'vendors',
+      context: __dirname,
+    }),
+    new webpack.optimize.UglifyJsPlugin()
+  ],
 }
 
 // webpack(webpackConf).run(function(err, stats) {
-webpack(webpackConf, function (err, stats) {
+webpack(options, function (err, stats) {
     // spinner.stop()
     if (err) throw err
     process.stdout.write(stats.toString({
@@ -49,4 +46,4 @@ webpack(webpackConf, function (err, stats) {
         '  Tip: built files are meant to be served over an HTTP server.\n' +
         '  Opening index.html over file:// won\'t work.\n'
     );
-})
+});

@@ -11,8 +11,9 @@ var currentPath = process.cwd();
 const DEFAULT_CONFIG = path.join(__dirname, '../src/config.example.js');
 const REAL_CONFIG = path.join(currentPath, './html-bundler.config.js');
 const DEFAULT_WEBPACK_CONFIG = path.join(__dirname, '../src/webpack.config.example.js');
-const DEFAULT_WEBPACK_DLL_CONFIG = path.join(__dirname, '../src/webpack.dll.js');
 const REAL_WEBPACK_CONFIG = path.join(currentPath, './webpack.config.js');
+const DEFAULT_DLL_CONFIG = path.join(__dirname, '../src/webpack.dll.example.js');
+const REAL_DLL_CONFIG = path.join(currentPath, './webpack.dll.js');
 const DEFAULT_STRUCTURE = path.join(__dirname, '../src/structure');
 
 
@@ -32,7 +33,7 @@ commander.command('init')
         }
         if (!fs.existsSync(REAL_WEBPACK_CONFIG) && webpack.webpack) {
             fs.copySync(DEFAULT_WEBPACK_CONFIG, REAL_WEBPACK_CONFIG);
-            fs.copySync(DEFAULT_WEBPACK_DLL_CONFIG, path.join(currentPath, './webpack.dll.js'));
+            fs.copySync(DEFAULT_DLL_CONFIG, path.join(currentPath, './webpack.dll.js'));
             logger.info('webpack配置文件创建成功, 请根据项目情况进行修改并安装依赖');
         }
 
@@ -49,7 +50,7 @@ commander.command('create [project]')
         logger.notice('项目' + project + '创建成功');
         if (webpack.webpack) {
             fs.copySync(DEFAULT_WEBPACK_CONFIG, path.join(currentPath, project, './webpack.config.js'));
-            fs.copySync(DEFAULT_WEBPACK_DLL_CONFIG, path.join(currentPath, project, './webpack.dll.js'));
+            fs.copySync(DEFAULT_DLL_CONFIG, path.join(currentPath, project, './webpack.dll.js'));
             logger.info('webpack配置文件创建成功, 请根据项目情况进行修改并安装依赖');
         }
     })

@@ -435,16 +435,17 @@ module.exports = function(env, port, hbconfig, wpconfig) {
          */
         if (config.moveList && config.moveList.length) {
             config.moveList.forEach(function (moveItem) {
-                var pathArr = moveItem.split('/');
-                pathArr.forEach(function(item, index) {
-                    if (!item) {
-                        pathArr.splice(index, 1);
-                    }
-                })
-                var moveItemName = pathArr[pathArr.length - 1];
-                if (fs.existsSync(moveItem)) {
-                    fs.copySync(moveItem, path.join(conf.output, moveItemName));
-                }
+                // var pathArr = moveItem.split('/');
+                // pathArr.forEach(function(item, index) {
+                //     if (!item) {
+                //         pathArr.splice(index, 1);
+                //     }
+                // })
+                // var moveItemName = pathArr[pathArr.length - 1];
+                // if (fs.existsSync(moveItem)) {
+                //     fs.copySync(moveItem, path.join(conf.output, moveItemName));
+                // }
+                gulp.src(moveItem).pipe(gulp.dest(conf.output))
 
             })
         }

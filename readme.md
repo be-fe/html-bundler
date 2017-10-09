@@ -169,3 +169,27 @@ module.exports = {
 
 ```
 
+### DLL优化
+如果你使用webpack模块化开发模式，一些基础依赖库如果也每次构建，会大大拖慢构建的速度，因此我们引入了webpack的dll插件。
+
+##### step1
+修改webpack.dll.js文件中的vendors数组，将依赖放进数组
+
+```js
+const vendors = [];
+```
+
+##### step2
+执行
+
+```sh
+npm run dll
+```
+生成`manifest.json`文件和`src/lib/vendors.js`文件
+
+##### step3
+
+在html文件中引入`../lib/vendors.js`文件，放在其他js文件之前
+
+
+
