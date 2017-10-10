@@ -13,7 +13,7 @@ module.exports = function(absolutePath, ignoreArr) {
     }
 
     for (var i = 0; i < checkArr.length; i++) {
-        if (absolutePath.match(checkArr[i])) {
+        if (absolutePath.indexOf(checkArr[i]) > -1) {
             return true
         }
     }
