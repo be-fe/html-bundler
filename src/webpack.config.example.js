@@ -1,7 +1,5 @@
 /* eslint-disable */
 var webpack = require('webpack');
-var HappyPack = require('happypack');
-var happyThreadPool = HappyPack.ThreadPool({ size: 8 });
 
 var commonConf = {
     module: {
@@ -10,12 +8,12 @@ var commonConf = {
             {
                 test: /\.tag$/,
                 exclude: /node_modules/,
-                loader: ['babel-loader?presets=latest', 'riotjs-loader']
+                loader: ['babel-loader', 'riotjs-loader']
             },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loaders: ['happypack/loader?id=js']
+                loaders: ['babel-loader']
             },
             {
                 test: /\.(jpeg|jpg|png|gif)$/,
@@ -52,7 +50,7 @@ var commonConf = {
         //     core: srcDir + "/js/core",
         //     ui: srcDir + "/js/ui"
         // }
-    },
+    }
 };
 
 var webpackConf = {
@@ -61,13 +59,7 @@ var webpackConf = {
         //devtool: "eval",  //快速打包
         cache: true,
         plugins: [
-            new webpack.HotModuleReplacementPlugin(),
-            new HappyPack({
-                id: 'js',
-                cache: true,
-                threadPool: happyThreadPool,
-                loaders: [ 'babel-loader?presets=latest' ]
-            })
+            new webpack.optimize.ModuleConcatenationPlugin(),
         ],
         module: commonConf.module,
         resolve: commonConf.resolve
@@ -78,12 +70,7 @@ var webpackConf = {
         devtool: false,
         cache: false,
         plugins: [
-            new HappyPack({
-                id: 'js',
-                cache: false,
-                threadPool: happyThreadPool,
-                loaders: [ 'babel-loader?presets=latest' ]
-            })
+            new webpack.optimize.ModuleConcatenationPlugin(),
         ],
         module: commonConf.module,
         resolve: commonConf.resolve
