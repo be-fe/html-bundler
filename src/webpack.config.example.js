@@ -75,7 +75,7 @@ var webpackConf = {
     },
 
     dest: {
-        devtool: null,
+        devtool: false,
         cache: false,
         plugins: [
             new HappyPack({
