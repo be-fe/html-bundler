@@ -446,7 +446,7 @@ module.exports = function(env, port, hbconfig, wpconfig) {
                 //     fs.copySync(moveItem, path.join(conf.output, moveItemName));
                 // }
                 gulp.src(moveItem).pipe(gulp.dest(conf.output))
-                gulp.src(path.join(moveItem, '**').pipe(gulp.dest(conf.output))
+                gulp.src(path.join(moveItem, '**')).pipe(gulp.dest(conf.output))
 
             })
         }
