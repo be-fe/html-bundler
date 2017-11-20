@@ -1,5 +1,7 @@
 /* eslint-disable */
 var webpack = require('webpack');
+var HappyPack = require('happypack');
+var happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 
 var commonConf = {
     module: {
@@ -13,7 +15,7 @@ var commonConf = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loaders: ['babel-loader']
+                loaders: ['happypack/loader?id=js']
             },
             {
                 test: /\.(jpeg|jpg|png|gif)$/,
@@ -56,10 +58,16 @@ var commonConf = {
 var webpackConf = {
     dev: {
         devtool: "inline-source-map",  //生成sourcemap,便于开发调试
-        //devtool: "eval",  //快速打包
+        //devtool: "cheap-eval-source-map",  //快速打包
         cache: true,
         plugins: [
-            new webpack.optimize.ModuleConcatenationPlugin(),
+            new HappyPack({
+                id: 'js',
+                cache: true,
+                verbose: false,
+                threadPool: happyThreadPool,
+                loaders: [ 'babel-loader' ]
+            }),
         ],
         module: commonConf.module,
         resolve: commonConf.resolve
@@ -86,7 +94,7 @@ try {
     webpackConf.dest.plugins.unshift(dllref);
 }
 catch(e) {
-    console.log(e);
+    console.log('没有生成webpack DllReferencePlugin插件所需的 manifest.json');
 }
 
 //一般来说，RD环境和QA环境打包配置和dest是一致的，但是需要不同的环境变量配置一些参数
