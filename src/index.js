@@ -36,6 +36,7 @@ module.exports = function(env, port, hbconfig, wpconfig) {
 
     var logger = require('./utils/logger.js');
     var isIgnore = require('./utils/isIgnore.js');
+    var isUrl = require('./utils/isUrl.js');
     var gulpFileCount = require('./utils/gulpFileCount.js');
 
     var currentPath = process.cwd();
@@ -172,13 +173,13 @@ module.exports = function(env, port, hbconfig, wpconfig) {
 
             $('script').each(function(i, item) {
                 var src = $(item).attr('src');
-                if (!is.url(src)) {
+                if (!isUrl(src)) {
                     $(item).attr('inline', 'inline');
                 }
             });
             $('link').each(function(i, item) {
                 var href = $(item).attr('href');
-                if (!is.url(href)) {
+                if (!isUrl(href)) {
                     $(item).attr('inline', 'inline');
                 }
             });
@@ -218,7 +219,7 @@ module.exports = function(env, port, hbconfig, wpconfig) {
              */
             var getPath = function(item, arr, attr) {
                 var originPath = item.attr(attr);
-                if (is.string(originPath) && !is.url(originPath)) {
+                if (is.string(originPath) && !isUrl(originPath)) {
                     var htmlPath = path.dirname(file.path);
                     var result = path.join(htmlPath, originPath);
                     if (!isIgnore(result, config.ignore)) {
@@ -266,7 +267,7 @@ module.exports = function(env, port, hbconfig, wpconfig) {
                         var src = $(item).attr('src');
                         var parent = $(item).parent();
                         $(item).remove();
-                        if (src && !is.url(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
+                        if (src && !isUrl(src) && !isIgnore(path.join(file.base, src), config.ignore)) {
                             if (!JSAppended) {
                                 parent.append('<script type="text/javascript" src="' + jsPath + '"></script>');
                                 JSAppended = true;
@@ -284,7 +285,7 @@ module.exports = function(env, port, hbconfig, wpconfig) {
                         var href = $(item).attr('href');
                         var parent = $(item).parent();
                         $(item).remove();
-                        if (href && !is.url(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
+                        if (href && !isUrl(href) && !isIgnore(path.join(file.base, href), config.ignore)) {
                             if (!CSSAppended) {
                                 parent.append('<link rel="stylesheet" type="text/css" href="' + cssPath + '"/>');
                                 CSSAppended = true
