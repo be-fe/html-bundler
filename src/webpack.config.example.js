@@ -79,6 +79,13 @@ var webpackConf = {
         cache: false,
         plugins: [
             new webpack.optimize.ModuleConcatenationPlugin(),
+            new HappyPack({
+                id: 'js',
+                cache: true,
+                verbose: false,
+                threadPool: happyThreadPool,
+                loaders: [ 'babel-loader' ]
+            }),
         ],
         module: commonConf.module,
         resolve: commonConf.resolve

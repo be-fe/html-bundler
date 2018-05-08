@@ -321,12 +321,9 @@ module.exports = function(env, port, hbconfig, wpconfig) {
                 }
             }
 
-            if (conf.concat) {          //如果bundle成一个文件
+            if (conf.concat || conf.bundle) {          //如果bundle成一个文件
                 replaceResource();
-            }
-            else if (conf.bundle) {
-                replaceResource('js');
-                addVersion('css');
+                addVersion();
             }
             else {
                 addVersion();
