@@ -323,7 +323,6 @@ module.exports = function(env, port, hbconfig, wpconfig) {
 
             if (conf.concat || conf.bundle) {          //如果bundle成一个文件
                 replaceResource();
-                addVersion();
             }
             else {
                 addVersion();
